@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emma — Personal Editorial Writing</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#faf8f3;--ink:#0f0f14;--blue:#1f2bff;--lime:#CDF22B;--line:rgba(15,15,20,.16);--grey:#76767e;--sans:'Inter Tight',system-ui,sans-serif;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--lime);color:var(--ink)}
+body.fine,body.fine *{cursor:none}
+#cur{position:fixed;left:0;top:0;width:30px;height:30px;z-index:500;pointer-events:none;mix-blend-mode:difference;display:none}
+body.fine #cur{display:block}
+#bar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--lime);transform-origin:left;transform:scaleX(0);z-index:300}
+nav{position:fixed;top:0;left:0;right:0;z-index:120;display:flex;justify-content:space-between;align-items:center;padding:calc(20px + env(safe-area-inset-top,0px)) 5vw 16px;background:var(--blue);color:var(--lime);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+nav a{position:relative}
+nav a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1.5px;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+nav a:hover::after{transform:scaleX(1)}
+nav span{opacity:.6}
+
+/* masthead */
+.mast{padding:120px 5vw 34px;text-align:center}
+.mast .k{font-size:12px;letter-spacing:.26em;color:var(--grey);text-transform:uppercase}
+.mast h1{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--blue);font-size:clamp(64px,9vw,128px);line-height:.9;letter-spacing:-.02em;margin:10px 0 18px}
+.mast .intro{max-width:620px;margin:0 auto;font-size:17px;line-height:1.6}.mast .intro b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.45em;line-height:1.25;display:block;margin-bottom:10px}.mast .intro b span{color:var(--blue)}
+
+/* table of contents */
+.toc{padding:44px 5vw 70px;max-width:1100px;margin:0 auto}
+.lab{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);padding-bottom:16px;border-bottom:1px solid var(--line)}
+.ent{position:relative;display:grid;grid-template-columns:56px 1fr auto;align-items:baseline;gap:20px;padding:22px 18px;margin:0 -18px;border-bottom:1px solid var(--line);overflow:hidden;transition:color .35s}
+.ent::before{content:"";position:absolute;inset:0;background:var(--blue);transform:scaleY(0);transform-origin:bottom;transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.ent>*{position:relative}
+.ent:hover{color:var(--lime)}.ent:hover::before{transform:scaleY(1)}
+.ent .n{font-size:12px;letter-spacing:.1em}
+.ent .t{font-family:var(--serif);font-size:clamp(30px,4vw,56px);line-height:1.05}
+.ent .m{font-size:12px;letter-spacing:.08em;opacity:.7;white-space:nowrap}
+
+/* article */
+article{padding:80px 5vw 110px;border-top:1px solid var(--line)}
+.ah{max-width:760px;margin:0 auto 46px;text-align:center}
+.ah .k{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--grey)}
+.ah h2{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6.4vw,92px);line-height:1;letter-spacing:-.01em;margin:16px 0 18px}
+.ah h2 em{color:var(--blue)}
+.ah .by{font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.ah .by b{font-weight:500;color:var(--blue)}
+figure.hero{max-width:420px;margin:0 auto 54px}
+figure.hero img{display:block;width:100%;height:auto;border-radius:4px;box-shadow:0 24px 50px rgba(15,15,20,.14)}
+.body{max-width:640px;margin:0 auto;font-size:19px;line-height:1.75}
+.body p{margin-bottom:22px}
+.body p.lead{font-family:var(--serif);font-size:clamp(24px,2.4vw,30px);line-height:1.35;margin-bottom:30px}
+.body p.drop::first-letter{float:left;font-family:var(--serif);font-size:4.6em;line-height:.8;padding:.06em .1em 0 0;color:var(--blue)}
+.body blockquote{font-family:var(--serif);font-style:italic;color:var(--blue);font-size:clamp(34px,4.4vw,56px);line-height:1.08;text-align:center;margin:46px -6vw;padding:30px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.body blockquote span{background:linear-gradient(transparent 62%,var(--lime) 62%,var(--lime) 92%,transparent 92%)}
+.body hr{border:0;text-align:center;margin:40px 0}
+.body hr::after{content:"✦ ✦ ✦";color:var(--blue);letter-spacing:.6em;font-size:12px}
+.end{max-width:640px;margin:46px auto 0;display:flex;justify-content:space-between;align-items:center;padding-top:22px;border-top:1px solid var(--line);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.end .sig{font-family:var(--serif);font-style:italic;font-size:28px;letter-spacing:0;text-transform:none;color:var(--blue)}
+.end a{border-bottom:1.5px solid var(--ink);padding-bottom:4px}
+
+.rv{opacity:0;transform:translateY(36px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+footer{background:var(--blue);color:var(--paper);padding:26px 5vw;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.06em}
+@media(max-width:700px){.ent{grid-template-columns:30px 1fr}.ent .m{grid-column:2}.body{font-size:17px}.body blockquote{margin:40px 0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}.rv{opacity:1;transform:none}}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:clamp(18px,2vw,28px);max-width:1240px;margin:0 auto;padding:30px 5vw 100px}
+.card{display:flex;flex-direction:column;border:1.5px solid var(--ink);background:var(--paper);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.card:hover{transform:translateY(-6px);box-shadow:8px 8px 0 var(--blue)}
+.cimg{aspect-ratio:1;overflow:hidden;border-bottom:1.5px solid var(--ink)}
+.cimg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.card:hover .cimg img{transform:scale(1.04)}
+.cb{padding:20px 20px 24px}
+.au{display:flex;align-items:center;gap:12px;font-size:13px;line-height:1.35}
+.au img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:1px solid var(--line)}
+.au b{display:block;font-weight:500}
+.tag{display:inline-block;margin:16px 0 12px;background:var(--blue);color:var(--lime);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:7px 11px}
+.card h3{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.1;margin-bottom:12px}
+.card p{font-size:15px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:#3a3a42}
+/* list / article views */
+body.reading .mast,body.reading #list{display:none}
+body:not(.reading) article{display:none}
+article{border-top:0;padding-top:120px}
+.back{display:block;max-width:760px;margin:0 auto 34px;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.back span{border-bottom:1.5px solid var(--ink);padding-bottom:4px}
+
+/* v3: header + card rail */
+.mast2{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;max-width:1300px;margin:0 auto;padding:120px 5vw 34px}
+.mast2 .k{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
+.mast2 h1{font-weight:600;letter-spacing:-.035em;line-height:1.02;font-size:clamp(34px,4.6vw,66px);max-width:980px}
+.mast2 h1 span{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--blue);letter-spacing:-.01em}
+.mast2 .sub{font-size:17px;line-height:1.55;max-width:560px;margin-top:18px;color:#3a3a42}
+.arrows{display:flex;gap:10px;flex:none}
+.arrows .ar{width:46px;height:46px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font-size:22px;line-height:1;display:grid;place-items:center;cursor:pointer;transition:background .3s,color .3s}
+.arrows .ar:hover{background:var(--lime);color:var(--ink)}
+.rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 5vw 90px;max-width:1300px;margin:0 auto;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.pc{flex:none;width:min(320px,78vw);scroll-snap-align:start;border-radius:26px;padding:16px 16px 16px;display:flex;flex-direction:column;min-height:540px;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.pc:hover{transform:translateY(-6px)}
+.pc.lime{background:var(--lime);color:var(--ink)}
+.pc.blue{background:var(--blue);color:var(--paper)}
+.pc.cream{background:#ece8df;color:var(--ink)}
+.pills{display:flex;gap:6px;align-items:center}
+.pills span{font-size:11px;letter-spacing:.04em;padding:6px 10px;border-radius:30px;background:rgba(255,255,255,.65);color:var(--ink)}
+.pills i{margin-left:auto;font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px}
+.pc h3{font-weight:600;letter-spacing:-.03em;font-size:34px;line-height:1.02;margin:20px 4px 10px}
+.pc .pt{flex:1 1 0;min-height:3.2em;font-size:15px;line-height:1.5;margin:0 4px 16px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.pimg{position:relative;flex:none;border-radius:18px;overflow:hidden;aspect-ratio:4/4.3}
+.pimg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.pc:hover .pimg img{transform:scale(1.05)}
+.go{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.9);color:var(--ink);font-size:12px;padding:6px 6px 6px 14px;border-radius:30px}
+.go b{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:400}
+body.reading .mast2{display:none}
+@media(max-width:700px){.mast2{flex-direction:column;align-items:flex-start}.arrows{display:none}}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:22px;flex:none}
+.badge{width:150px;height:150px;animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:700px){.side{display:none}}
+@media(prefers-reduced-motion:reduce){.badge{animation:none}}
+.body h3{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3vw,38px);line-height:1.15;margin:44px 0 18px}
+.body h3 em{color:var(--blue)}
+.body a{color:var(--blue);text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:3px;text-underline-offset:3px}
+.body a:hover{background:var(--lime);color:var(--ink)}
+
+/* article view, in the card DA */
+article.art{padding:110px 5vw 110px;max-width:1100px}
+article.art .back{margin:0 0 22px;max-width:none}
+article.art .back span{display:inline-flex;align-items:center;gap:8px;border:0;background:var(--ink);color:var(--paper);border-radius:30px;padding:10px 16px;font-size:11px;letter-spacing:.14em;transition:background .3s,color .3s}
+article.art .back:hover span{background:var(--lime);color:var(--ink)}
+article.art .ah{max-width:none;margin:0 0 54px;text-align:left;border-radius:26px;padding:22px 28px 30px}
+article.art .ah{padding:0;border-radius:0;color:var(--ink)}
+article.art .ah .pills span{background:var(--blue);color:var(--lime)}
+article.art .ah h2{font-family:var(--sans);font-weight:600;letter-spacing:-.035em;line-height:1.02;font-size:clamp(38px,5.4vw,76px);margin:20px 0 18px;max-width:900px}
+article.art .ah h2 em{font-family:var(--serif);font-weight:400;font-style:italic;letter-spacing:-.01em;color:inherit}
+article.art .ah h2 em{color:var(--blue)}
+article.art .ah .by{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+article.art .ah .by b{color:inherit;font-weight:600}
+article.art .body{max-width:680px;margin:0}
+article.art .body p.lead{font-family:var(--sans);font-weight:600;letter-spacing:-.02em;font-size:clamp(22px,2.2vw,28px);line-height:1.3}
+article.art .body p.drop::first-letter{font-family:var(--sans);font-weight:600;color:var(--blue)}
+article.art .body h3{font-family:var(--sans);font-weight:600;letter-spacing:-.025em;font-size:clamp(24px,2.4vw,32px);line-height:1.15}
+article.art .body h3 em{font-family:var(--serif);font-weight:400;font-style:italic}
+article.art .body blockquote{text-align:left;margin:40px 0;padding:0;border:0;background:none;color:var(--blue);font-size:clamp(28px,3.2vw,42px)}
+article.art .body blockquote span{background:none;color:var(--blue)}
+article.art .body hr{text-align:left}
+article.art .end{max-width:680px;margin:46px 0 0}
+article.art .end a{border:0;background:var(--ink);color:var(--paper);border-radius:30px;padding:10px 16px;font-size:11px;transition:background .3s,color .3s}
+article.art .end a:hover{background:var(--lime);color:var(--ink)}
+@media(max-width:700px){article.art .ah{padding:18px 18px 24px}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="cur"><svg viewBox="0 0 28 28" width="30" height="30"><circle cx="14" cy="14" r="11" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="10" cy="12" r="1.4" fill="#fff"/><circle cx="18" cy="12" r="1.4" fill="#fff"/><path d="M9 17Q14 21 19 17" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+
+<nav><a href="../index.html">← Portfolio</a></nav>
+
+<header class="mast2">
+  <div>
+    <h1>Saviez-vous que pour <span>73 % de la Gen-Z</span>, TikTok est devenu le premier moteur de recherche ?</h1>
+    <p class="sub">Ici, on décrypte les phénomènes de société qui se cachent derrière les trends de notre réseau social favori.</p>
+  </div>
+  <div class="side"><svg class="badge" viewBox="0 0 150 150" aria-hidden="true"><defs><path id="c" d="M75 75m-60 0a60 60 0 1 1 120 0a60 60 0 1 1-120 0"/></defs><text font-size="11.5" fill="#0f0f14" font-family="Inter Tight, sans-serif"><textPath href="#c" textLength="372" lengthAdjust="spacing">PERSONAL ✦ EDITORIAL ✦ WRITING ✦ PEW ✦ </textPath></text><circle cx="75" cy="75" r="28" fill="#CDF22B"/><g fill="none" stroke="#1f2bff" stroke-width="2.2" stroke-linecap="round"><circle cx="75" cy="75" r="20"/><path d="M66 82Q75 90 84 82"/></g><circle cx="68" cy="70" r="2.2" fill="#1f2bff"/><circle cx="82" cy="70" r="2.2" fill="#1f2bff"/></svg><div class="arrows"><button class="ar" data-dir="-1" aria-label="Articles précédents">‹</button><button class="ar" data-dir="1" aria-label="Articles suivants">›</button></div></div>
+</header>
+
+<section class="rail" id="list">
+  <a class="pc lime" href="#love">
+    <div class="pills"><span>Anglais</span><span>2 min</span><i>↗</i></div>
+    <h3>Love &amp; other dru… Tiktoks.</h3>
+    <p class="pt">Thinking about breaking up with your partner because the Internet convinced you that they weren’t good enough? Hardly surprising: when you scroll the equivalent of a football field and half of what you see is just random people’s opinions about love and relationships, the choice doesn’t even really belong to you anymore.</p>
+    <div class="pimg"><img src="img/love.jpg" alt="" loading="lazy"><span class="go">Lire l’article <b>→</b></span></div>
+  </a>
+  <a class="pc blue" href="#nospend">
+    <div class="pills"><span>Français</span><span>3 min</span><i>↗</i></div>
+    <h3>Le No Spend Challenge : quand économiser devient tendance</h3>
+    <p class="pt">Après le Dry January, c’est au tour du mois de février de nous priver d’un autre petit plaisir. Et pas des moindres. En février, vous pouvez dire adieu à la magnifique fausse fourrure aperçue en vitrine : ce mois-ci, le thème c’est zéro dépenses.</p>
+    <div class="pimg"><img src="img/nospend.jpg" alt="" loading="lazy"><span class="go">Lire l’article <b>→</b></span></div>
+  </a>
+  <a class="pc cream" href="#forbes">
+    <div class="pills"><span>Anglais</span><span>3 min</span><i>↗</i></div>
+    <h3>When the brutally honest girls from TikTok effortlessly reach Forbes.</h3>
+    <p class="pt">If you look closely, through the glitter, the 12 steps-morning-routine and all the perfect bodies that may seem to be haunting your TikTok FYP, you will eventually meet authentic women online. And some of them made it to the Forbes Top Creators list.</p>
+    <div class="pimg"><img src="img/forbes.jpg" alt="" loading="lazy"><span class="go">Lire l’article <b>→</b></span></div>
+  </a>
+  <a class="pc lime" href="#hustle">
+    <div class="pills"><span>Français</span><span>3 min</span><i>↗</i></div>
+    <h3>Mom, I don’t want to be a rich man.</h3>
+    <p class="pt">La Hustle Culture : un phénomène qui nous fait penser qu’on peut, nous aussi, devenir millionnaire du jour au lendemain. Ou pas. À 25 ans, il faudrait se lever à 5 h, faire 2 h de sport, lire 10 pages de développement personnel et gagner 10 000 € par mois.</p>
+    <div class="pimg"><img src="img/hustle.jpg" alt="" loading="lazy"><span class="go">Lire l’article <b>→</b></span></div>
+  </a>
+</section>
+
+<article id="love" class="art lime">
+  <a class="back" href="#list" data-close><span>← Tous les articles</span></a>
+  <header class="ah rv">
+    <div class="pills"><span>Anglais</span><span>2 min</span></div>
+    
+    <h2>Love &amp; other dru…<em>Tiktoks.</em></h2>
+    <p class="by">By <b>Emma Di Gesaro</b> · 2 min read</p>
+  </header>
+  <div class="body">
+    <p class="lead rv">Thinking about breaking up with your partner because the Internet convinced you that they weren’t good enough?</p>
+    <p class="drop rv">Hardly surprising: when you scroll the equivalent of a football field and half of what you see is just random people’s opinions about love and relationships, the choice doesn’t even really belong to you anymore. And yet, you think it does.</p>
+    <p class="rv">Technology has always slipped into our love stories. For the better, when your parents, madly in love, finally got the chance to talk for hours on the phone; but also for the worse, as men and women now find themselves having every decisions judged by the gods of the TikTok algorithm.</p>
+    <p class="rv">This digital fog spreads across the planet of love. We don’t understand each other anymore, we forget each other from one day to the next, and we replace each other, convinced we’ll find someone better — because obviously, the Internet said so:</p>
+    <blockquote class="rv"><span>“if he wanted to he would.”</span></blockquote>
+    <p class="rv">This sentence — which is nothing more than a form of romantic myopia — might actually be becoming one of the platform’s most profitable angles. In reality, relationship‑based content makes up 20 to 30% of all videos on TikTok, enough to save you a few therapy sessions and boost the platform’s power.</p>
+    <p class="rv">In some cases, the Internet can offer genuinely valuable advice: educational, thoughtful, relevant content that analyzes modern love with a human lens.</p>
+    <p class="rv">But once the algorithm gets involved, that digital fog thickens.</p>
+    <hr>
+    <p class="rv">The sad truth is that we can’t blame the Internet and its 2.0 love gurus entirely, because the algorithm only feeds us what we already watch. One single video about relationships and everything can spiral. E‑psychology, once useful and healthy, turns into a kind of psychological fast‑food: every detail becomes a rule, every behavior becomes a green, red or even beige flag.</p>
+    <p class="rv">And little by little, we internalize these micro‑dogmas, wrapped in trendy audios (to keep the algorithm happy).</p>
+    <p class="rv">But it’s worth remembering that TikTok is sometimes nothing more than a distorted mirror.</p>
+  </div>
+  <div class="end rv"><span class="sig">— Emma</span><a href="#list" data-close>Tous les articles ↑</a></div>
+</article>
+<article id="nospend" lang="fr" class="art blue">
+  <a class="back" href="#list" data-close><span>← Tous les articles</span></a>
+  <header class="ah rv">
+    <div class="pills"><span>Français</span><span>3 min</span></div>
+    
+    <h2>Le No Spend Challenge : quand économiser devient <em>tendance</em></h2>
+    <p class="by">Par <b>Emma Di Gesaro</b> · 3 min de lecture</p>
+  </header>
+  <div class="body">
+    <p class="lead rv">Après le <a href="https://www.tiktok.com/channel/dry-january" target="_blank" rel="noopener">Dry January</a> qui consiste à ne pas consommer une goutte d’alcool tout le mois durant, c’est au tour du mois de février de nous priver d’un autre petit plaisir.</p>
+    <p class="drop rv">Et pas des moindres. En février, vous pouvez dire adieu à la magnifique fausse fourrure que vous avez aperçue 3 jours plus tôt en vitrine et ne songez même pas à vous offrir le dernier iPhone, car ce mois-ci, le thème c’est : zéro dépenses.</p>
+    <blockquote class="rv"><span>C’était peut-être mieux de se priver d’alcool finalement.</span></blockquote>
+    <h3 class="rv">No spend February : on su<em>SPEND</em> les dépenses !</h3>
+    <p class="rv">Alors, non, on ne vous parle pas d’arrêter de faire les courses ni de vous priver de dentifrice, mais l’idée est plutôt de tirer un trait sur ces dépenses qui vous font tomber dans le rouge à la fin du mois. Je sais que vous savez.</p>
+    <p class="rv">Le <a href="https://www.tiktok.com/search?q=nospendchallenge&amp;t=1709023274990" target="_blank" rel="noopener">#nospendchallenge</a>, c’est une trend qui plaît aux utilisateurs TikTok et qui cumule des dizaines de milliers de publications, et pas seulement durant le mois de février.</p>
+    <p class="rv">Après les fêtes de fin d’année où beaucoup sont partis piocher dans leurs économies pour faire plaisir à tante Yvonne, c’est finalement ce mouvement collectif qui vient nous encourager à discipliner nos finances et surtout, revoir notre mode de consommation.</p>
+    <p class="rv">Quand on y pense, se prouver à soi-même que l’on est capable de ne rien dépenser durant tout un mois et afficher ses meilleures astuces pour économiser facilement… Mais comment en sommes-nous arrivés là ?</p>
+    <p class="rv">Le No Spend Challenge, qui s’apparente littéralement à une sorte de purification financière, est le résultat d’une société où nos habitudes de consommation sont régies par l’influence de ce que nous voyons en ligne, autrement dit : nous consommons beaucoup (beaucoup) trop de choses dont nous n’avons pas nécessairement besoin.</p>
+    <h3 class="rv">TikTok, l’ennemi juré de votre banquier.</h3>
+    <p class="rv">Prenons un exemple simple. Vos sœurs, vos belles-sœurs, vos cousines et peut-être même votre mère connaissent Hailey Bieber, qui, depuis quelques mois, fait la fortune des coiffeurs avec sa nouvelle couleur de cheveux, la seule et unique <a href="https://www.tiktok.com/search?q=hailey%20bieber%20hair%20color&amp;t=1709023381272" target="_blank" rel="noopener">Cinnamon cookie butter color</a>, autrement dit le nouveau branding du châtain lumineux.</p>
+    <p class="rv">Ce changement d’appellation d’une simple couleur de cheveux a littéralement enflammé TikTok et probablement généré des milliers d’euros de plus dans la caisse de votre coiffeur.</p>
+    <p class="rv">Cependant, l’influence de TikTok ne se limite pas à notre coupe de cheveux ou notre style, elle attaque désormais nos placards. L’incontournable Stanley Quencher Cup, <a href="https://www.tiktok.com/@victoria_robino_26/video/7318781471873977646?lang=fr&amp;q=stanley%20cup%20&amp;t=1709023686828" target="_blank" rel="noopener">la gourde virale de TikTok</a> (mes ancêtres actuellement en erreur 404) qui s’élève à la modique somme de 50 euros, a généré 750 millions de dollars de chiffre d’affaires en 2023.</p>
+    <p class="rv">Alors, si une gourde à 50 euros peut faire la fortune de ses créateurs tandis que l’on ne cesse d’entendre parler d’une baisse de pouvoir d’achat et d’inflation, c’est peut-être que le marketing a encore quelques tours dans son sac… Après tout, dans les années 50, on a bien réussi à nous convaincre que les cigarettes étaient bonnes pour la santé.</p>
+    <h3 class="rv">L’UGC, la recette des marques pour nous faire consommer.</h3>
+    <p class="rv">Sur TikTok, on ne fait plus seulement confiance aux marques pour nous dire quoi acheter : on écoute surtout ceux qui les ont testées. Une vidéo spontanée ou une courte recommandation face caméra peuvent parfois avoir bien plus de poids qu’une publicité soigneusement pensée par une marque.</p>
+    <p class="rv">À l’heure où ces mêmes marques s’arrachent les micro-influenceurs qui surfent sur la tendance de l’User Generated Content qui consiste à mettre en valeur un produit contre une rémunération, c’est notre désir de consommation qui s’accroît.</p>
+    <p class="rv">Imaginez une cour de récréation où tous les enfants ont décidé de porter un pull rouge. Si vous êtes le seul à ne pas en posséder, vous vous sentirez hors du lot, voire pire, cela deviendra une nécessité de posséder un pull rouge, car son absence dans votre penderie deviendra un besoin. Pour l’UGC, c’est pareil.</p>
+    <p class="rv">Utiliser le pouvoir d’influence de monsieur et madame tout le monde à qui nous pouvons tous nous identifier, c’est la recette parfaite pour créer un manque chez les prospects et une relation de confiance entre le consommateur et l’influenceur, qui en réalité cache la marque.</p>
+    <p class="rv">Créer du contenu est une activité prenante qui requiert bien plus que ce que l’on pense : donner envie à une communauté d’acheter une gourde à 50 euros relève réellement du challenge. Ainsi, les créateurs de contenu maîtrisent les codes de l’influence sur le bout des doigts : un avis convainquant, un contenu esthétique et une prise de vue plus spontanée qu’impeccable sont devenus des indispensables pour nous faire craquer sur cette fameuse whishlist qui dort depuis 3 semaines.</p>
+    <p class="rv"><em>Puisse le sort vous être favorable ce mois-ci.</em></p>
+  </div>
+  <div class="end rv"><span class="sig">— Emma</span><a href="#list" data-close>Tous les articles ↑</a></div>
+</article>
+<article id="forbes" lang="en" class="art cream">
+  <a class="back" href="#list" data-close><span>← Tous les articles</span></a>
+  <header class="ah rv">
+    <div class="pills"><span>Anglais</span><span>3 min</span></div>
+    
+    <h2>When the brutally honest girls from TikTok effortlessly reach <em>Forbes.</em></h2>
+    <p class="by">By <b>Emma Di Gesaro</b> · 3 min read</p>
+  </header>
+  <div class="body">
+    <p class="lead rv">If you look closely, through the glitter, the 12 steps-morning-routine and all the perfect bodies that may seem to be haunting your TikTok FYP, you will eventually meet authentic women online.</p>
+    <p class="drop rv">And if you ever get to put your phone down and open a Forbes magazine (or your laptop because who the hell put their phone away?), you might also come across their beautiful faces in the <a href="https://www.forbes.com/sites/stevenbertoni/2023/09/26/top-creators-2023/" target="_blank" rel="noopener">Top Creator 2023</a> list.</p>
+    <p class="rv">If “Is this too much for a lil bar in New Jersey” or “Love ya” doesn’t sound familiar, you should consider going out of your cave, because that’s the first step to turn followers into fortunes: being inevitably remembered for what you spontaneously said online.</p>
+    <p class="rv">It is well known that nowadays, influencers have the power to sell out any products thanks to their fame, but they also, low-key, have the power to destroy your mental health by letting you think that they have a perfect life… And you don’t.</p>
+    <p class="rv">But it seems that today, thanks to a new generation of women, the war between perfection and average is finally over.</p>
+    <p class="rv">Because yes, when being an influencer is a full-time job that some people may still be criticizing, the influence also knows how to work its magic on your mental health.</p>
+    <hr>
+    <p class="rv"><a href="https://www.forbes.com/profile/emma-chamberlain/" target="_blank" rel="noopener">Emma Chamberlain</a>, <a href="https://www.forbes.com/profile/dylan-mulvaney/?sh=204641d249a2" target="_blank" rel="noopener">Dylan Mulvaney</a>, <a href="https://www.forbes.com/video/6337810992112/how-influencer-alix-earle-cornered-a-social-media-market-and-made-5-million-in-one-year/" target="_blank" rel="noopener">Alix Earle</a> and many more are the women that know how to brighten up your TikTok FYP. Feeling ugly because of your acne scars or feeling not productive because you couldn’t find the strength to get out of bed today? Don’t worry ladies, they do too!</p>
+    <p class="rv">On their podcasts or YouTube channels, these girls were bold enough to finally break the mold of the perfectly curated influencer aesthetic of the influencer who can’t show their weaknesses online because it will cost them too many followers.</p>
+    <blockquote class="rv"><span>The Imperfect Queen Era has finally risen up.</span></blockquote>
+    <p class="rv">Thanks to these Gen-Z superwomen, the Imperfect Queen Era has finally risen up. It was about time.</p>
+    <p class="rv">On her TikTok page, Dylan Mulvaney who was named a Top Forbes creator, shares her journey as a transgender woman with her 10 million followers, Alix Earle doesn’t hesitate to destroy the cliché of the perfect girl when showing her bad skin days to her 6.4 million followers on TikTok and the unfiltered, self-deprecating Emma Chamberlain opens up on depression, anxiety and burn-out on her podcast <em>Anything Goes</em>.</p>
+    <h3 class="rv">The real question is: did we ever think, five years ago, that the internet had room for this type of content?</h3>
+    <p class="rv">These women know how to talk about their real lives, our real lives and sprinkle sprinkle: that’s how you build an online empire these days.</p>
+    <p class="rv">Talking about what nobody used to talk about online such as depression, weight-gain or weight-loss, acne, gender transition or breakups is the open door to not only fame but a long-lasting community that will eventually lead to society changes, such as the moment when Dylan Mulvaney sat down with president Joe Biden to discuss transgender rights.</p>
+    <p class="rv">If you take a minute (or two) you might realize that we are living a profound change in what people want to see in entertainment: perfection is being knocked out by authenticity.</p>
+    <p class="rv">Who ever felt less alone while watching the perfect girl getting ready before going to her perfect dream job? Absolutely nobody.</p>
+    <p class="rv"><em>Girls cry, girls fight for LGBTQ+ rights, girls get acne, girls get depression, girls get fired and the girls who get it, just got it all.</em></p>
+  </div>
+  <div class="end rv"><span class="sig">— Emma</span><a href="#list" data-close>Tous les articles ↑</a></div>
+</article>
+<article id="hustle" lang="fr" class="art lime">
+  <a class="back" href="#list" data-close><span>← Tous les articles</span></a>
+  <header class="ah rv">
+    <div class="pills"><span>Français</span><span>3 min</span></div>
+    
+    <h2>Mom, I don’t want to be a <em>rich man.</em></h2>
+    <p class="by">Par <b>Emma Di Gesaro</b> · 3 min de lecture</p>
+  </header>
+  <div class="body">
+    <p class="lead rv">La Hustle Culture : un phénomène qui nous fait penser qu’on peut, nous aussi, devenir millionnaire du jour au lendemain. Ou pas.</p>
+    <p class="drop rv">Quand on a 25 ans au 21<sup>e</sup> siècle, il faut se lever à 5 h du matin, faire 2 h de sport dans la journée, lire au moins 10 pages d’un livre de développement personnel et rapporter en moyenne 10 000 € par mois grâce à un business en ligne qui nous permet de travailler tout en voyageant dans le monde entier.</p>
+    <p class="rv">En effet, c’est ce que veulent nous faire croire les adeptes d’un style de vie presque sectaire, qui n’acceptent que les meilleurs dans leur équipe et qui ne tolèrent que “l’hyper productivité” et la sur-glorification de l’ambition.</p>
+    <blockquote class="rv"><span>Heure de la crise d’angoisse : 16&nbsp;h&nbsp;32.</span></blockquote>
+    <p class="rv">On la surnomme la “Hustle Culture” et quand on décide d’y adhérer, on met le travail au centre de sa vie. Le surmenage professionnel n’a plus rien d’anormal et les heures supplémentaires deviennent monnaie courante.</p>
+    <p class="rv">Dans la liste des pères fondateurs de cette culture du capitalisme, on compte Elon Musk, avec son tweet “personne n’a changé le monde en 40 heures”. C’est sûr que quand on pèse 180 milliards de dollars, masquer l’aspect toxique d’un style de vie menant au surmenage est un jeu d’enfant.</p>
+    <h3 class="rv">#QuietQuitting et #LazyGirlJob : sur TikTok, l’avenir appartient à celui qui fait le minimum, <em>et bien.</em></h3>
+    <p class="rv">Ce mode de vie qu’est la Hustle Culture et qui, en apparence, fait rêver, perd de sa puissance face à de jeunes adultes qui osent nager à contre-courant d’une société qui impose la norme de l’ambition à toute épreuve. Pour cette catégorie de personnes, décomplexer face à un train de vie qui ne ressemble pas à la success-story de Bill Gates leur permet de mener une vie qui leur correspond, sans jamais se comparer aux exigences démesurées de notre époque.</p>
+    <p class="rv">Le plus impressionnant dans tout cela ? Que leur train de vie en apparence basique, qu’ils décident d’exposer sur TikTok sous forme de vlog ou de vidéos inspirationnelles, nous donnerait presque envie de renoncer à nous battre contre l’hyper-capitalisme et de partir nous exiler vendre des glaces en Jamaïque.</p>
+    <p class="rv">Sur le réseau social TikTok, les hashtags #LazyGirlJob ou encore #QuietQuitting ont respectivement atteint 51 millions et 1 milliard de vues. Avec de tels chiffres, on se sent moins seul et on peut tranquillement dire adieu au stress en guise de réussite professionnelle.</p>
+    <p class="rv">Derrière le #LazyGirlJob se cache en réalité une manière de penser allant bien plus loin que la traduction littérale équivalente à “un taff de fille fainéante”. Ce hashtag, qui réunit à lui seul des millions de personnes dans le monde entier, est en réalité l’incarnation digitale d’un mode de vie qui peut se résumer par « S’investir dans sa boîte, gravir les échelons d’une entreprise… Ce n’est pas l’objectif de tout le monde. Le “Lazy Girl Job” est une façon de penser qui permet d’éviter cette fatalité ! », comme l’a dit Gabrielle Judge, la créatrice de contenu aux 170 000 abonnés TikTok et fondatrice de antiworkgirlboss.</p>
+    <p class="rv">Certains y verront un éloge de la paresse voire un désengagement féministe, mais ce phénomène instaure indéniablement un nouveau rapport à l’emploi, pour certains plus sain, à l’encontre des idées de l’autrice et fondatrice de NastyGal, Sophia Amoruso, qui prône un style de vie ultracapitaliste dans son livre à succès “Girlboss” paru en 2014. Spoiler alerte, l’inventrice de la girlbossitude a été accusée de management toxique et d’avoir procédé à des licenciements abusifs, sans parler du rythme de travail qualifié “d’insoutenable” par ses équipes.</p>
+    <hr>
+    <p class="rv">Cette tendance pourrait laisser penser que le problème est générationnel, que la Gen Z aspire à un train de vie de luxe, tout en fournissant le minimum d’efforts, mais il s’agit en réalité d’une prise de conscience qui dépasse de loin l’environnement professionnel.</p>
+    <p class="rv">Avec le #QuietQuitting, ce sont des milliards de personnes qui assument fournir les efforts strictement nécessaires pour conserver leur poste, sans jamais prôner l’acharnement au travail.</p>
+    <p class="rv">« À quoi bon tout donner pour un système qui ne me traite pas bien ? » C’est la question soulevée par la journaliste Salomé Saqué, comme elle l’explique dans son enquête <em>Sois jeune et tais-toi</em> : « Le Covid a montré que ce système avait des limites saillantes. Tout peut s’arrêter du jour au lendemain. Et les jeunes sont en première ligne dans les emplois précaires. »</p>
+    <p class="rv"><em>Partir vendre des glaces en Jamaïque, ça ne se refuse pas quand on y pense…</em></p>
+  </div>
+  <div class="end rv"><span class="sig">— Emma</span><a href="#list" data-close>Tous les articles ↑</a></div>
+</article>
+
+<footer><span>Emma Di Gesaro — Personal Editorial Writing</span><span>© 2026</span></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+$$('.rv').forEach(e=>io.observe(e));
+addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.transform=`scaleX(${h.scrollTop/(h.scrollHeight-h.clientHeight)})`},{passive:true});
+
+$$('.arrows .ar').forEach(b=>b.addEventListener('click',()=>{const r=$('#list');r.scrollBy({left:+b.dataset.dir*(r.querySelector('.pc').offsetWidth+20),behavior:'smooth'})}));
+function route(){const id=location.hash.slice(1);const art=id&&document.getElementById(id);const on=!!(art&&art.tagName==='ARTICLE');
+  document.body.classList.toggle('reading',on);$$('article').forEach(a=>a.style.display=on&&a===art?'block':'none');
+  if(on){scrollTo(0,0);$$('article .rv').forEach(e=>e.classList.add('in'))}}
+addEventListener('hashchange',route);route();
+$$('[data-close]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();history.pushState('',document.title,location.pathname);route();scrollTo(0,0)}));
+if(matchMedia('(hover:hover) and (pointer:fine)').matches){document.body.classList.add('fine');
+  let mx=innerWidth/2,my=innerHeight/2,x=mx,y=my;addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function l(){x+=(mx-x)*.22;y+=(my-y)*.22;$('#cur').style.transform=`translate(${x-15}px,${y-15}px)`;requestAnimationFrame(l)})()}
+</script>
+</body>
+</html>

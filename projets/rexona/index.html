@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emma — Rexona × Olivier Giroud</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#faf8f3;--ink:#0f0f14;--blue:#1f2bff;--line:rgba(15,15,20,.16);--grey:#76767e;--sans:'Inter Tight',system-ui,sans-serif;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+body.fine,body.fine *{cursor:none}
+#cur{position:fixed;left:0;top:0;width:30px;height:30px;z-index:500;pointer-events:none;mix-blend-mode:difference;display:none}
+body.fine #cur{display:block}
+#bar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--blue);transform-origin:left;transform:scaleX(0);z-index:300}
+/* opening: blue curtain, like the row hover on the home page */
+.curtain{position:fixed;inset:0;background:var(--blue);z-index:400;transform-origin:top;animation:lift 1s cubic-bezier(.7,0,.2,1) 1.35s forwards;display:grid;place-items:center;color:var(--paper);font-family:var(--serif);font-style:italic;font-size:clamp(40px,8vw,110px)}
+.curtain span{opacity:0;animation:fadein .6s ease .1s forwards,fadeout .4s ease 1.2s forwards}
+@keyframes fadein{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes lift{to{transform:scaleY(0)}}
+@keyframes fadeout{from{opacity:1}to{opacity:0;transform:translateY(-20px)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:120;display:flex;justify-content:space-between;align-items:center;padding:20px 5vw 16px;background:rgba(250,248,243,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+nav a{position:relative}
+nav a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1.5px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+nav a:hover::after{transform:scaleX(1)}
+nav .k{color:var(--grey)}
+/* hero */
+.hero{display:flex;flex-direction:column;justify-content:flex-start;padding:96px 5vw 24px}
+.hero+section{padding-top:36px}
+.kick{font-size:12px;letter-spacing:.26em;color:var(--grey);margin-bottom:26px;overflow:hidden}
+.kick span,.t span{display:inline-block;transform:translateY(110%);transition:transform 1.1s cubic-bezier(.2,.8,.2,1) var(--d,0s)}
+body.ready .kick span,body.ready .t span{transform:none}
+h1{font-weight:600;letter-spacing:-.04em;line-height:.92;font-size:clamp(54px,min(10.5vw,17vh),190px)}
+h1 .t{display:block;overflow:hidden;padding-bottom:.24em;margin-bottom:-.18em}
+h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--blue);letter-spacing:-.02em}
+.sub{font-family:var(--serif);font-style:italic;font-size:clamp(24px,3vw,42px);margin-top:18px;max-width:900px}
+.facts{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:56px;padding-top:20px;border-top:1px solid var(--line)}
+.facts dt{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);margin-bottom:8px}
+.facts dd{font-size:16px;line-height:1.35}
+.pf{display:flex;gap:14px;align-items:center}.pf svg{width:20px;height:20px;fill:var(--ink)}
+.todo{color:var(--blue);font-family:var(--serif);font-style:italic}
+/* sections */
+section{padding:90px 5vw}
+.lab{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);margin-bottom:46px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:5vw}
+.three h3{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,3.4vw,52px);margin-bottom:18px;display:flex;align-items:baseline;gap:14px}
+.three h3 small{font-family:var(--sans);font-style:normal;font-size:12px;letter-spacing:.1em;color:var(--blue)}
+.three p{font-size:18px;line-height:1.6}
+.three p b{font-weight:600;color:var(--blue)}
+.rv{opacity:0;transform:translateY(46px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+/* mockups: horizontal scroll driven by vertical scroll */
+.mocks{position:relative;padding:0}
+.mocks .pin{position:relative;overflow:hidden;display:flex;flex-direction:column;padding:0 0 70px}
+.hero+section{padding-bottom:40px}
+.mocks .lab{margin:0 5vw 4vh}
+.track{display:flex;gap:4vw;padding:0 5vw 40px;justify-content:center}
+.phone{flex:none;width:min(30vh,300px);border-radius:30px;background:#151518;padding:5px;box-shadow:0 0 0 1px #2c2c31,0 24px 50px rgba(15,15,20,.16);position:relative}
+.track{align-items:flex-start}.phone:nth-child(even){margin-top:4vh}
+.screen{width:100%;aspect-ratio:9/16;border-radius:25px;overflow:hidden;position:relative;background:linear-gradient(160deg,#2a36ff,#121a8c);display:grid;place-items:center;color:var(--paper);text-align:center}
+.screen video,.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.screen .ph{font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.1;padding:20px}
+.screen .ph small{display:block;font-family:var(--sans);font-style:normal;font-size:10px;letter-spacing:.2em;margin-top:12px;opacity:.75}
+.snd{position:absolute;top:12px;right:12px;z-index:3;border:0;border-radius:30px;padding:5px 10px;background:rgba(250,248,243,.85);color:var(--ink);font:500 9px var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.snd.on{background:var(--blue);color:var(--paper)}
+.cap{position:absolute;left:0;right:0;bottom:-34px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);text-align:center}
+/* copy quote */
+.quote{padding:130px 5vw}
+.quote blockquote{font-family:var(--serif);font-style:italic;font-size:clamp(44px,7vw,116px);line-height:1.02;letter-spacing:-.01em;max-width:1300px}
+.quote blockquote .q{color:var(--blue)}
+.quote .by{display:flex;gap:16px;margin-top:34px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+.quote .by b{color:var(--blue);font-weight:500}
+/* results */
+.results{background:var(--blue);color:var(--paper);padding:44px 5vw 50px}
+.results .lab{margin-bottom:28px}
+.results .lab{color:rgba(250,248,243,.7);border-color:rgba(250,248,243,.3)}
+.nums{display:grid;grid-template-columns:repeat(3,auto);justify-content:space-between;gap:4vw}
+.num b{display:block;font-weight:600;letter-spacing:-.04em;font-size:clamp(48px,6vw,104px);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.num span{display:block;font-family:var(--serif);font-style:italic;font-size:clamp(20px,2vw,28px);margin-top:10px}
+/* next project */
+.next{display:block;padding:70px 5vw 80px;border-top:1px solid var(--line);position:relative;overflow:hidden;transition:color .4s}
+.next::before{content:"";position:absolute;inset:0;background:var(--blue);transform:scaleY(0);transform-origin:bottom;transition:transform .55s cubic-bezier(.7,0,.2,1)}
+.next>*{position:relative}
+.next:hover{color:var(--paper)}
+.next:hover::before{transform:scaleY(1)}
+.next small{font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.7}
+.next div{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.next strong{font-family:var(--serif);font-weight:400;font-size:clamp(54px,10vw,170px);line-height:1}
+.next i{font-style:normal;font-size:clamp(40px,6vw,90px);transition:transform .5s}
+.next:hover i{transform:translateX(16px) rotate(-45deg)}
+@media(max-width:800px){.facts{grid-template-columns:1fr 1fr}.three,.nums{grid-template-columns:1fr;gap:44px}.mocks{height:auto}.mocks .pin{position:relative;height:auto;padding:80px 0}.track{justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:50px;transform:none!important}.phone{scroll-snap-align:center;height:auto;width:66vw}.phone:nth-child(even){margin-top:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.curtain{display:none}.kick span,.t span{transform:none}.rv{opacity:1;transform:none}}
+/* realistic iPhone + Instagram mockups */
+.mocks .track{justify-content:center;align-items:flex-start;gap:clamp(18px,3vw,48px);padding:0 5vw}
+.mocks .grp{margin-bottom:110px}.mocks .grp:last-child{margin-bottom:20px}
+.gh{margin:0 5vw 44px;max-width:680px}
+.gt2 b{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--blue)}
+.gx{font-size:17px;line-height:1.6;margin-top:12px}
+.iph{--H:min(68vh,600px);flex:none;position:relative;height:var(--H);aspect-ratio:9/19.5;border-radius:calc(var(--H)*.085);background:#1a1a1d;padding:calc(var(--H)*.012);box-shadow:inset 0 0 0 1.5px #3a3a3f,0 26px 50px rgba(15,15,20,.18);font-size:calc(var(--H)/48);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",var(--sans),sans-serif}
+.iph:nth-child(even){margin-top:0}
+.di{position:absolute;top:calc(var(--H)*.028);left:50%;width:27%;height:calc(var(--H)*.04);transform:translateX(-50%);background:#000;border-radius:99px;z-index:5}
+.scr{position:relative;width:100%;height:100%;border-radius:calc(var(--H)*.074);overflow:hidden;display:flex;flex-direction:column}
+.scr.dark{background:#000;color:#fff}.scr.light{background:#fff;color:#111}
+.sb{display:flex;justify-content:space-between;align-items:center;height:4.3em;padding:0 1.7em 0 2.6em;flex:none}
+.sb b{font-size:1.15em;font-weight:600}.sbi{display:flex;gap:.45em;align-items:center}.sbi svg{height:.95em;fill:currentColor}.sbi svg:last-child{height:1em}
+.sarea{flex:1;min-height:0;container-type:size;display:flex;align-items:flex-start;justify-content:center}
+.stry{position:relative;width:min(100cqw,calc(100cqh * var(--r)));aspect-ratio:var(--r);border-radius:.9em;overflow:hidden;flex:none}
+.stry>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sov{position:absolute;left:0;right:0;top:0;padding:.7em .8em 2.4em;background:linear-gradient(rgba(0,0,0,.35),transparent);color:#fff}
+.pb{display:flex;gap:.25em}.pb i{flex:1;height:.17em;border-radius:1em;background:rgba(255,255,255,.4)}.pb i.done,.pb i.on{background:#fff}
+.sh{display:flex;align-items:center;gap:.6em;margin-top:.75em;font-size:1em}.sh b{font-weight:600}.tm{opacity:.75}.sp{flex:1}
+.sh svg{width:1.55em;height:1.55em;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
+.av{flex:none;width:2.5em;height:2.5em;border-radius:50%;overflow:hidden;box-shadow:0 0 0 .12em rgba(255,255,255,.9)}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.rep{display:flex;align-items:center;gap:1.1em;padding:.8em 1.1em 2.6em;flex:none}
+.pill{flex:1;border:1px solid rgba(255,255,255,.55);border-radius:2em;padding:.75em 1.1em;font-size:1em;color:rgba(255,255,255,.9)}
+.rep svg,.fh svg,.nav svg,.igh svg,.ic svg{width:1.85em;height:1.85em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round;flex:none}
+.hb{position:absolute;bottom:.7em;left:50%;width:36%;height:.38em;border-radius:1em;transform:translateX(-50%);background:currentColor;opacity:.9}
+.fh{display:flex;align-items:center;gap:1.2em;padding:.2em 1.1em .7em;flex:none}.iglogo{font-family:var(--serif);font-style:italic;font-size:2em;line-height:1;letter-spacing:-.01em}
+.ig{flex:1;min-height:0;overflow:hidden}.igh{display:flex;align-items:center;gap:.7em;padding:.6em 1em;font-size:1.05em}.igh b{font-weight:600}.igh .av{width:2.6em;height:2.6em;box-shadow:0 0 0 .14em #fff,0 0 0 .28em #e1306c}
+.igh svg{width:1.6em}
+.cv{position:relative}
+.cs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:1}
+.cs::-webkit-scrollbar{display:none}
+.cs img{flex:none;width:100%;height:100%;object-fit:cover;scroll-snap-align:start}
+.cn{position:absolute;top:.8em;right:.8em;background:rgba(0,0,0,.65);color:#fff;font-size:.95em;padding:.2em .7em;border-radius:2em}
+.ca{position:absolute;top:50%;margin-top:-1em;width:2em;height:2em;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:#111;font-size:1em;line-height:1;display:grid;place-items:center;transition:opacity .25s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.ca.l{left:.7em}.ca.r{right:.7em}.ca[disabled]{opacity:0}
+.igb{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:.8em 1em .3em}
+.ic{display:flex;gap:1.1em}.ic.r{justify-content:flex-end}
+.ic svg.liked{fill:#ed4956;stroke:#ed4956}
+.cd{display:flex;gap:.3em}.cd i{width:.45em;height:.45em;border-radius:50%;background:#c7c7c7;transition:background .3s}.cd i.on{background:#0095f6}
+.igc{padding:.3em 1em;font-size:1.05em}
+.igm{padding:0 1em;font-size:.95em;line-height:1.3}.igm p{margin-top:.25em}.igm b{font-weight:600;margin-right:.25em}.igm .all{display:block;color:#8e8e8e;margin-top:.2em}.igm .when{display:block;margin-top:.6em;font-size:.8em;color:#8e8e8e;text-transform:uppercase;letter-spacing:.02em}.igc b{font-weight:600;margin-right:.3em}
+.nav{display:flex;justify-content:space-around;align-items:center;padding:.8em 1em 2.3em;border-top:1px solid #efefef;flex:none}.nav .av{width:2em;height:2em;box-shadow:none}
+@media(max-width:800px){.mocks .track{justify-content:flex-start}.iph{--H:min(72vh,560px)}}
+
+.reel .sarea{position:relative}
+.reel .sb{padding:0 1.3em 0 2.4em}
+.iph .di{width:24%}
+.rv9{--r:.5625;background:#111;width:100% !important;height:100%;aspect-ratio:auto !important;border-radius:0 0 .9em .9em}
+.rv9 video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rv9 .ph{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font-family:var(--serif);font-style:italic;font-size:2.2em;background:linear-gradient(160deg,#2a36ff,#121a8c)}
+.rv9 .ph small{display:block;font:500 .4em var(--sans);font-style:normal;letter-spacing:.2em;margin-top:.8em;opacity:.75}
+.rtop{position:absolute;left:0;right:0;top:0;background:linear-gradient(rgba(0,0,0,.45),transparent);padding-bottom:1.6em}
+.rh{display:flex;align-items:center;padding:.1em 1.2em}.rh b{font-size:1.6em;font-weight:700}.rh svg{width:1.9em;height:1.9em;fill:none;stroke:#fff;stroke-width:1.8}
+.ract{position:absolute;right:.8em;bottom:3.4em;display:flex;flex-direction:column;align-items:center;gap:1.1em}
+.ract span{display:flex;flex-direction:column;align-items:center;gap:.2em}.ract small{font-size:.8em}
+.ract svg{width:1.9em;height:1.9em;fill:none;stroke:#fff;stroke-width:1.8;stroke-linejoin:round;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.ract .aud .av{width:2em;height:2em;border-radius:.4em;box-shadow:0 0 0 .12em #fff}
+.rbot{position:absolute;left:0;right:3.4em;bottom:0;padding:2em 1em 1em;background:linear-gradient(transparent,rgba(0,0,0,.55))}
+.ru{display:flex;align-items:center;gap:.6em}.ru b{font-weight:600}.fl{border:1px solid rgba(255,255,255,.7);border-radius:.5em;padding:.15em .6em;font-size:.9em;font-weight:600}
+.rc{margin-top:.5em;font-size:.95em;line-height:1.3}.ra{margin-top:.4em;font-size:.85em;opacity:.9}
+.reel .nav{background:#000;border-top:1px solid #222;color:#fff}
+.reel .nav .av{width:2em;height:2em}
+.snd{position:absolute;font-size:inherit;top:8.4em;right:.8em;bottom:auto;z-index:3;width:auto;height:2.6em;border:0;border-radius:2em;background:rgba(0,0,0,.55);display:flex;align-items:center;gap:.4em;padding:0 .9em 0 .7em;color:#fff;font:600 .85em/1 -apple-system,BlinkMacSystemFont,var(--sans),sans-serif;cursor:pointer;animation:sndp 2.4s ease-in-out infinite}
+.snd::after{content:'Activer le son'}.snd.on::after{content:'Son activé'}.snd.on{animation:none}
+@keyframes sndp{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}50%{box-shadow:0 0 0 .45em rgba(255,255,255,0)}}
+.rv9 video{cursor:pointer}
+.snd svg{width:1.4em;height:1.4em;flex:none;fill:none;stroke:#fff;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.snd.on{background:var(--blue)}
+.iph .cap{position:absolute;left:0;right:0;bottom:-2.6em;font:500 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--grey);text-align:center}
+.mocks .track{padding-bottom:50px}
+</style>
+</head>
+<body>
+<div class="curtain"><span>Rexona</span></div>
+<div id="bar"></div>
+<div id="cur"><svg viewBox="0 0 28 28" width="30" height="30"><circle cx="14" cy="14" r="11" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="10" cy="12" r="1.4" fill="#fff"/><circle cx="18" cy="12" r="1.4" fill="#fff"/><path d="M9 17Q14 21 19 17" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+
+<nav><a href="../../index.html#work">← Projets</a><span class="k">01 / 07</span></nav>
+
+<header class="hero">
+  <p class="kick"><span>PROJET 01 — SOCIAL MEDIA CONTENT</span></p>
+  <h1><span class="t"><span style="--d:.1s">Rexona</span></span><span class="t"><span style="--d:.22s">× <em>Olivier Giroud</em></span></span></h1>
+  <p class="sub rv">De l'expérience événementielle à l'activation social media : une rencontre exclusive avec Olivier Giroud déclinée en 4 contenus vidéo.</p>
+  <dl class="facts rv">
+    <div><dt>Client</dt><dd>Rexona</dd></div>
+    <div><dt>Agence</dt><dd>Unilever</dd></div>
+    <div><dt>Mon rôle</dt><dd>Conception-Rédaction</dd></div>
+    <div><dt>Année</dt><dd>2026</dd></div>
+    <div><dt>Plateformes</dt><dd class="pf"><svg viewBox="0 0 24 24" role="img" aria-label="TikTok"><title>TikTok</title><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><svg viewBox="0 0 24 24" role="img" aria-label="Instagram"><title>Instagram</title><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><svg viewBox="0 0 24 24" role="img" aria-label="Facebook"><title>Facebook</title><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></dd></div>
+  </dl>
+</header>
+
+<section>
+  <div class="lab rv"><span>Le projet</span><span>(03)</span></div>
+  <div class="three">
+    <div class="rv"><h3>Le brief <small>01</small></h3><p>À l’occasion de la FIFA, Rexona a lancé des concours sur plusieurs plateformes sociales, offrant à cinq gagnants l’opportunité de rencontrer Olivier Giroud. Une occasion privilégiée de <b>prolonger l’expérience</b> au-delà du concours en imaginant et produisant des contenus social media autour de cette rencontre.</p></div>
+    <div class="rv" style="transition-delay:.1s"><h3>L'insight <small>02</small></h3><p>« Les fans ne veulent pas seulement regarder le football, ils veulent <b>en faire partie</b>. Tester leurs connaissances, partager les références qu’ils ont en commun et découvrir ce qui se passe au-delà du terrain. »</p></div>
+    <div class="rv" style="transition-delay:.2s"><h3>L'idée <small>03</small></h3><p>Transformer une rencontre avec Olivier Giroud en <b>terrain de jeu social</b>, où les fans peuvent retrouver les codes du football, découvrir une autre facette du joueur et accéder aux coulisses.</p></div>
+  </div>
+</section>
+
+<section class="mocks" id="mocks">
+  <div class="pin">
+    <div class="lab"><span>Les contenus</span><span>(04)</span></div>
+    <div class="track" id="track"><div class="iph"><div class="scr dark reel"><div class="sarea"><div class="stry rv9"><video src="videos/aftermovie.mp4" poster="videos/aftermovie.jpg" muted loop playsinline preload="metadata"></video><button class="snd" aria-label="Activer le son"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button><div class="rtop"><div class="sb"><b>9:41</b><span class="sbi"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0zM3.4 6.8a6.5 6.5 0 0 1 9.2 0l-1.5 1.5a4.4 4.4 0 0 0-6.2 0zM1 4.4a9.9 9.9 0 0 1 14 0l-1.5 1.5a7.8 7.8 0 0 0-11 0z"/></svg><svg viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="2"/><rect x="23.5" y="4" width="1.8" height="4" rx=".9" opacity=".45"/></svg></span></div><div class="rh"><b>Reels</b><span class="sp"></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="4"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6l1.5-2.5h4L15.5 6"/></svg></div></div><div class="ract"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.4 0 5.6 3.3 4.4 6.7-1.7 4.7-9.2 9.3-9.2 9.3z"/></svg><small>J’aime</small></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 16.9A9 9 0 1 0 17 20.4L21.5 21.5z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 3 9.2 10.7M22 3l-7 18-3.8-8.3L3 9z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></span><span class="aud"><span class="av"><img src="videos/avatar.jpg" alt=""></span></span></div><div class="rbot"><div class="ru"><span class="av"><img src="videos/avatar.jpg" alt=""></span><b>rexona</b><span class="fl">Suivre</span></div><p class="ra">♫ Rexona · Son original</p></div></div></div><div class="nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 8h18M8 3l3 5M14 3l3 5M10 11.5v6l5-3z"/></svg><span class="av"><img src="videos/avatar.jpg" alt=""></span></div><span class="hb"></span></div><span class="di"></span><p class="cap">Aftermovie</p></div><div class="iph"><div class="scr dark reel"><div class="sarea"><div class="stry rv9"><video src="videos/ref.mp4" poster="videos/ref.jpg" muted loop playsinline preload="metadata"></video><button class="snd" aria-label="Activer le son"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button><div class="rtop"><div class="sb"><b>9:41</b><span class="sbi"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0zM3.4 6.8a6.5 6.5 0 0 1 9.2 0l-1.5 1.5a4.4 4.4 0 0 0-6.2 0zM1 4.4a9.9 9.9 0 0 1 14 0l-1.5 1.5a7.8 7.8 0 0 0-11 0z"/></svg><svg viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="2"/><rect x="23.5" y="4" width="1.8" height="4" rx=".9" opacity=".45"/></svg></span></div><div class="rh"><b>Reels</b><span class="sp"></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="4"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6l1.5-2.5h4L15.5 6"/></svg></div></div><div class="ract"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.4 0 5.6 3.3 4.4 6.7-1.7 4.7-9.2 9.3-9.2 9.3z"/></svg><small>J’aime</small></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 16.9A9 9 0 1 0 17 20.4L21.5 21.5z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 3 9.2 10.7M22 3l-7 18-3.8-8.3L3 9z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></span><span class="aud"><span class="av"><img src="videos/avatar.jpg" alt=""></span></span></div><div class="rbot"><div class="ru"><span class="av"><img src="videos/avatar.jpg" alt=""></span><b>rexona</b><span class="fl">Suivre</span></div><p class="ra">♫ Rexona · Son original</p></div></div></div><div class="nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 8h18M8 3l3 5M14 3l3 5M10 11.5v6l5-3z"/></svg><span class="av"><img src="videos/avatar.jpg" alt=""></span></div><span class="hb"></span></div><span class="di"></span><p class="cap">T’as la ref ?</p></div><div class="iph"><div class="scr dark reel"><div class="sarea"><div class="stry rv9"><video src="videos/anecdote.mp4" poster="videos/anecdote.jpg" muted loop playsinline preload="metadata"></video><button class="snd" aria-label="Activer le son"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button><div class="rtop"><div class="sb"><b>9:41</b><span class="sbi"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0zM3.4 6.8a6.5 6.5 0 0 1 9.2 0l-1.5 1.5a4.4 4.4 0 0 0-6.2 0zM1 4.4a9.9 9.9 0 0 1 14 0l-1.5 1.5a7.8 7.8 0 0 0-11 0z"/></svg><svg viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="2"/><rect x="23.5" y="4" width="1.8" height="4" rx=".9" opacity=".45"/></svg></span></div><div class="rh"><b>Reels</b><span class="sp"></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="4"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6l1.5-2.5h4L15.5 6"/></svg></div></div><div class="ract"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.4 0 5.6 3.3 4.4 6.7-1.7 4.7-9.2 9.3-9.2 9.3z"/></svg><small>J’aime</small></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 16.9A9 9 0 1 0 17 20.4L21.5 21.5z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 3 9.2 10.7M22 3l-7 18-3.8-8.3L3 9z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></span><span class="aud"><span class="av"><img src="videos/avatar.jpg" alt=""></span></span></div><div class="rbot"><div class="ru"><span class="av"><img src="videos/avatar.jpg" alt=""></span><b>rexona</b><span class="fl">Suivre</span></div><p class="ra">♫ Rexona · Son original</p></div></div></div><div class="nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 8h18M8 3l3 5M14 3l3 5M10 11.5v6l5-3z"/></svg><span class="av"><img src="videos/avatar.jpg" alt=""></span></div><span class="hb"></span></div><span class="di"></span><p class="cap">Anecdote</p></div><div class="iph"><div class="scr dark reel"><div class="sarea"><div class="stry rv9"><div class="ph">Backstages<small>BIENTÔT</small></div><div class="rtop"><div class="sb"><b>9:41</b><span class="sbi"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0zM3.4 6.8a6.5 6.5 0 0 1 9.2 0l-1.5 1.5a4.4 4.4 0 0 0-6.2 0zM1 4.4a9.9 9.9 0 0 1 14 0l-1.5 1.5a7.8 7.8 0 0 0-11 0z"/></svg><svg viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="2"/><rect x="23.5" y="4" width="1.8" height="4" rx=".9" opacity=".45"/></svg></span></div><div class="rh"><b>Reels</b><span class="sp"></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="4"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6l1.5-2.5h4L15.5 6"/></svg></div></div><div class="ract"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.4 0 5.6 3.3 4.4 6.7-1.7 4.7-9.2 9.3-9.2 9.3z"/></svg><small>J’aime</small></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 16.9A9 9 0 1 0 17 20.4L21.5 21.5z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 3 9.2 10.7M22 3l-7 18-3.8-8.3L3 9z"/></svg></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></span><span class="aud"><span class="av"><img src="videos/avatar.jpg" alt=""></span></span></div><div class="rbot"><div class="ru"><span class="av"><img src="videos/avatar.jpg" alt=""></span><b>rexona</b><span class="fl">Suivre</span></div><p class="ra">♫ Rexona · Son original</p></div></div></div><div class="nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 8h18M8 3l3 5M14 3l3 5M10 11.5v6l5-3z"/></svg><span class="av"><img src="videos/avatar.jpg" alt=""></span></div><span class="hb"></span></div><span class="di"></span><p class="cap">Backstages</p></div></div>
+  </div>
+</section>
+
+<section class="results" id="results">
+  <div class="lab"><span>Les résultats</span><span>…&amp; I read the data</span></div>
+  <div class="nums">
+    <div class="num"><b data-to="4">4</b><span>contenus</span></div>
+    <div class="num"><b data-to="+140K">+140K</b><span>vues</span></div>
+    <div class="num"><b data-to="+5K">+5K</b><span>engagements</span></div>
+  </div>
+</section>
+
+<a class="next" href="../avene/index.html"><small>Projet suivant</small><div><strong>Avène</strong><i>→</i></div></a>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+setTimeout(()=>document.body.classList.add('ready'),1700);
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.2});
+$$('.rv').forEach(e=>io.observe(e));
+/* reading progress + horizontal mockup track */
+function onScroll(){const h=document.documentElement;$('#bar').style.transform=`scaleX(${h.scrollTop/(h.scrollHeight-h.clientHeight)})`;
+  const m=$('#mocks'),t=$('#track');if(false){const r=m.getBoundingClientRect(),max=m.offsetHeight-innerHeight,p=Math.min(1,Math.max(0,-r.top/max));
+    t.style.transform=`translateX(${-p*(t.scrollWidth-innerWidth)}px)`}}
+addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);onScroll();
+/* results: count up to data-to, or flicker digits then show the placeholder (same spirit as "data" on the home) */
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;ro.disconnect();
+  $$('.num b').forEach((b,k)=>{const to=b.dataset.to,final=b.textContent,t0=performance.now()+k*150;
+    (function f(now){const t=(now-t0)/1400;if(t<0)return requestAnimationFrame(f);
+      const m=to&&to.match(/^([^\d]*)([\d.,]+)(.*)$/);if(m){const v=parseFloat(m[2].replace(',','.'));b.textContent=m[1]+(t>=1?m[2]:Math.round(v*(1-Math.pow(1-t,3))))+m[3]}
+      else b.textContent=t>=1?final:String(Math.floor(Math.random()*90+10));
+      if(t<1)requestAnimationFrame(f)})(performance.now())})}),{threshold:.4});
+ro.observe($('#results'));
+/* videos: play when visible, tap the pill to switch sound on (one at a time) */
+const MUTED='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',LOUD='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg>';const vs=$$('.iph video');
+const vo=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting)v.play().catch(()=>{});else v.pause()}),{threshold:.35});
+vs.forEach(v=>vo.observe(v));
+$$('.snd').forEach(b=>b.addEventListener('click',()=>{const v=b.parentNode.querySelector('video'),on=v.muted;
+  vs.forEach(o=>{o.muted=true;o.parentNode.querySelector('.snd').classList.remove('on');o.parentNode.querySelector('.snd').innerHTML=MUTED});
+  if(on){v.muted=false;v.currentTime=0;v.play();b.classList.add('on');b.innerHTML=LOUD}}));
+$$('.iph video').forEach(v=>v.addEventListener('click',()=>{const b=v.parentNode.querySelector('.snd');b&&b.click()}));
+/* smiley cursor */
+if(matchMedia('(hover:hover) and (pointer:fine)').matches){document.body.classList.add('fine');
+  let mx=innerWidth/2,my=innerHeight/2,x=mx,y=my;addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function l(){x+=(mx-x)*.22;y+=(my-y)*.22;$('#cur').style.transform=`translate(${x-15}px,${y-15}px)`;requestAnimationFrame(l)})()}
+</script>
+</body>
+</html>
